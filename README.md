@@ -1,5 +1,5 @@
 # API-REST-con-Spring-Boot
-Proyecto de API REST con la tecnología Spring Boot para la cátedra de Desarrollo de Software.
+Este es un proyecto de API REST con la tecnología Spring Boot para la cátedra de Desarrollo de Software.
 
 ## Tabla de Contenidos
 
