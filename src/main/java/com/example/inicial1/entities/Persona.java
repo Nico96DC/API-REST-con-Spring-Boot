@@ -16,11 +16,7 @@ import org.hibernate.envers.Audited;
 @ToString
 @Builder
 @Audited
-public class Persona implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class Persona extends Base implements Serializable {
     @Column(name = "Nombre")
     private String nombre;
 

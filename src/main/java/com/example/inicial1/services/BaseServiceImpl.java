@@ -1,0 +1,77 @@
+package com.example.inicial1.services;
+
+import com.example.inicial1.entities.Base;
+import com.example.inicial1.repositories.BaseRepository;
+import jakarta.transaction.Transactional;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Optional;
+
+public abstract class BaseServiceImpl <E extends Base, ID extends Serializable> implements BaseService<E, ID> {
+    protected BaseRepository<E, ID> baseRepository;
+
+    public BaseServiceImpl(BaseRepository baseRepository) {
+        this.baseRepository = baseRepository;
+    }
+
+    @Override
+    @Transactional
+    public List<E> findAll() throws Exception {
+        try {
+            return baseRepository.findAll();
+        } catch (Exception error) {
+            throw new Exception(error.getMessage());
+        }
+    }
+
+    @Override
+    @Transactional
+    public E findbyId(ID id) throws Exception {
+        try {
+            Optional<E> entityOptional = baseRepository.findById(id);
+            return entityOptional.get();
+        } catch (Exception error) {
+            throw new Exception(error.getMessage());
+        }
+    }
+
+    @Override
+    @Transactional
+    public E save(E entity) throws Exception {
+        try {
+            entity = baseRepository.save(entity);
+            return entity;
+        } catch (Exception error) {
+            throw new Exception(error.getMessage());
+        }
+    }
+
+    @Override
+    @Transactional
+    public E update(ID id, E entity) throws Exception {
+        try {
+            Optional<E> entityOptional = baseRepository.findById(id);
+            E entityUpdate = entityOptional.get();
+            entityUpdate = baseRepository.save(entity);
+            return entityUpdate;
+        } catch (Exception error) {
+            throw new Exception(error.getMessage());
+        }
+    }
+
+    @Override
+    @Transactional
+    public boolean delete(ID id) throws Exception {
+        try {
+            if (baseRepository.existsById(id)) {
+                baseRepository.deleteById(id);
+                return true;
+            } else {
+                throw new Exception();
+            }
+        } catch (Exception error) {
+            throw new Exception(error.getMessage());
+        }
+    }
+}

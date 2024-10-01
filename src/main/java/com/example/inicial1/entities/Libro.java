@@ -16,11 +16,7 @@ import java.util.List;
 @ToString
 @Builder
 @Audited
-public class Libro implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class Libro extends Base implements Serializable {
     @Column(name = "Título")
     private String titulo;
 

@@ -14,11 +14,7 @@ import java.io.Serializable;
 @ToString
 @Builder
 @Audited
-public class Localidad implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class Localidad extends Base implements Serializable {
     @Column(name = "Localidad")
     private String denominacion;
 }
