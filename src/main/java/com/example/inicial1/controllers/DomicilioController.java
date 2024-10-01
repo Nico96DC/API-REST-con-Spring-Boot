@@ -17,10 +17,11 @@ public class DomicilioController {
     @Autowired
     private DomicilioServices servicio;
 
-    @Autowired
-    private DomicilioRepository domicilioRepository;
+    public DomicilioController(DomicilioServices servicio) {
+        this.servicio = servicio;
+    }
 
-    @GetMapping
+    @GetMapping("")
     public ResponseEntity<?> getAll(){
         try {
             return ResponseEntity.status(HttpStatus.OK).
@@ -32,7 +33,7 @@ public class DomicilioController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getOne(@PathVariable("id") Long id){
+    public ResponseEntity<?> getOne(@PathVariable Long id){
         try {
             return ResponseEntity.status(HttpStatus.OK).
                     body(servicio.findbyId(id));
@@ -44,11 +45,11 @@ public class DomicilioController {
 
     @PostMapping("")
     public ResponseEntity<?> save(@RequestBody Domicilio entity){
-        System.out.println("Datos tomados del cuerpo del formulario");
-        System.out.println("Calle:" + entity.getCalle());
-        System.out.println("Numero:" + entity.getNumero());
         try {
-            return ResponseEntity.status(HttpStatus.OK).
+            System.out.println("Datos tomados del cuerpo del formulario");
+            System.out.println("Calle:" + entity.getCalle());
+            System.out.println("Numero:" + entity.getNumero());
+            return ResponseEntity.status(HttpStatus.CREATED).
                     body(servicio.save(entity));
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
@@ -58,13 +59,13 @@ public class DomicilioController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Domicilio entity) {
-        System.out.println("ID tomada de la url " + entity.getId());
-        System.out.println("Datos tomados del cuerpo del formulario");
-        System.out.println("Calle:" + entity.getCalle());
-        System.out.println("Numero:" + entity.getNumero());
         try {
+            System.out.println("ID tomada de la url " + entity.getId());
+            System.out.println("Datos tomados del cuerpo del formulario");
+            System.out.println("Calle:" + entity.getCalle());
+            System.out.println("Numero:" + entity.getNumero());
             return ResponseEntity.status(HttpStatus.OK).
-                    body(servicio.save(entity));
+                    body(servicio.update(id, entity));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body("{\"error\":\"Error de solicitud. Por favor, intente de nuevo más tarde\"}");
@@ -75,7 +76,7 @@ public class DomicilioController {
     public ResponseEntity<?> delete(@PathVariable Long id){
         try {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).
-                    body("Registro " + id + " eliminado");
+                    body(servicio.delete(id));
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body("{\"error\":\"Error de solicitud. Por favor, intente de nuevo más tarde\"}");

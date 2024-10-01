@@ -17,7 +17,7 @@ public class DomicilioServices implements BaseService<Domicilio> {
     @Override
     @Transactional
     public List<Domicilio> findAll() throws Exception {
-        try{
+        try {
             return domicilioRepository.findAll();
         } catch (Exception error) {
             throw new Exception(error.getMessage());
@@ -27,13 +27,9 @@ public class DomicilioServices implements BaseService<Domicilio> {
     @Override
     @Transactional
     public Domicilio findbyId(Long id) throws Exception {
-        try{
-            Optional<Domicilio> entityOptional = domicilioRepository.findById(id);
-            if (entityOptional.isPresent()) {
-                return entityOptional.get();
-            } else {
-                throw new Exception();
-            }
+        try {
+            Optional<Domicilio> domicilioOptional = domicilioRepository.findById(id);
+            return domicilioOptional.get();
         } catch (Exception error) {
             throw new Exception(error.getMessage());
         }
@@ -42,7 +38,7 @@ public class DomicilioServices implements BaseService<Domicilio> {
     @Override
     @Transactional
     public Domicilio save(Domicilio entity) throws Exception {
-        try{
+        try {
             entity = domicilioRepository.save(entity);
             return entity;
         } catch (Exception error) {
@@ -53,17 +49,11 @@ public class DomicilioServices implements BaseService<Domicilio> {
     @Override
     @Transactional
     public Domicilio update(Long id, Domicilio entity) throws Exception {
-        try{
-            Optional<Domicilio> entityOptional = domicilioRepository.findById(id);
-            if (entityOptional.isPresent()) {
-                Domicilio domicilio = entityOptional.get();
-                domicilio.setCalle(entity.getCalle());
-                domicilio.setNumero(entity.getNumero());
-                domicilio = domicilioRepository.save(domicilio);
-                return domicilio;
-            } else {
-                throw new Exception();
-            }
+        try {
+            Optional<Domicilio> domicilioOptional = domicilioRepository.findById(id);
+            Domicilio domicilio = domicilioOptional.get();
+            domicilio = domicilioRepository.save(domicilio);
+            return domicilio;
         } catch (Exception error) {
             throw new Exception(error.getMessage());
         }
@@ -72,11 +62,11 @@ public class DomicilioServices implements BaseService<Domicilio> {
     @Override
     @Transactional
     public boolean delete(Long id) throws Exception {
-        try{
-            if (domicilioRepository.existsById(id)){
+        try {
+            if (domicilioRepository.existsById(id)) {
                 domicilioRepository.deleteById(id);
                 return true;
-            } else{
+            } else {
                 throw new Exception();
             }
         } catch (Exception error) {

@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.envers.Audited;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,9 +15,9 @@ import java.util.List;
 @Setter
 @Getter
 @ToString
-@SuperBuilder
+@Builder
 @Audited
-public class Autor {
+public class Autor implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,14 +25,9 @@ public class Autor {
     @Column(name = "Nombre")
     private String nombre;
 
-    @Column(name = "Nombre")
+    @Column(name = "Apellido")
     private String apellido;
 
     @Column(name = "Biografía")
     private String bio;
-
-    @ManyToMany(mappedBy = "autores")
-    @Builder.Default
-    @ToString.Exclude
-    private List<Libro> libros = new ArrayList<>();
 }

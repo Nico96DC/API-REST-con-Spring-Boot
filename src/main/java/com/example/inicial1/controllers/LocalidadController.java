@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/localidad")
@@ -17,10 +16,11 @@ public class LocalidadController {
     @Autowired
     private LocalidadServices servicio;
 
-    @Autowired
-    private LocalidadRepository localidadRepository;
+    public LocalidadController(LocalidadServices servicio) {
+        this.servicio = servicio;
+    }
 
-    @GetMapping
+    @GetMapping("")
     public ResponseEntity<?> getAll(){
         try {
             return ResponseEntity.status(HttpStatus.OK).
@@ -32,7 +32,7 @@ public class LocalidadController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getOne(@PathVariable("id") Long id){
+    public ResponseEntity<?> getOne(@PathVariable Long id){
         try {
             return ResponseEntity.status(HttpStatus.OK).
                     body(servicio.findbyId(id));
@@ -42,12 +42,12 @@ public class LocalidadController {
         }
     }
 
-    @PostMapping
+    @PostMapping("")
     public ResponseEntity<?> save(@RequestBody Localidad entity){
-        System.out.println("Datos tomados del cuerpo del Formulario");
-        System.out.println("Denominacion:" + entity.getDenominacion());
         try {
-            return ResponseEntity.status(HttpStatus.OK).
+            System.out.println("Datos tomados del cuerpo del formulario");
+            System.out.println("Denominacion:" + entity.getDenominacion());
+            return ResponseEntity.status(HttpStatus.CREATED).
                     body(servicio.save(entity));
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
@@ -57,12 +57,12 @@ public class LocalidadController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Localidad entity){
-        System.out.println("ID tomada de la url " + entity.getId());
-        System.out.println("Datos tomados del cuerpo del formulario");
-        System.out.println("Denominacion:" + entity.getDenominacion());
         try {
+            System.out.println("ID tomada de la url " + entity.getId());
+            System.out.println("Datos tomados del cuerpo del formulario");
+            System.out.println("Denominacion:" + entity.getDenominacion());
             return ResponseEntity.status(HttpStatus.OK).
-                    body(servicio.save(entity));
+                    body(servicio.update(id, entity));
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body("{\"error\":\"Error de solicitud. Por favor, intente de nuevo más tarde\"}");
@@ -73,7 +73,7 @@ public class LocalidadController {
     public ResponseEntity<?> delete(@PathVariable Long id){
         try {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).
-                    body("Registro " + id + " eliminado");
+                    body(servicio.delete(id));
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body("{\"error\":\"Error de solicitud. Por favor, intente de nuevo más tarde\"}");

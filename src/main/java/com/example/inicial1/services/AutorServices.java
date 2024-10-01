@@ -29,11 +29,7 @@ public class AutorServices implements BaseService<Autor> {
     public Autor findbyId(Long id) throws Exception {
         try{
             Optional<Autor> entityOptional = autorRepository.findById(id);
-            if (entityOptional.isPresent()) {
-                return entityOptional.get();
-            } else {
-                throw new Exception();
-            }
+            return entityOptional.get();
         } catch (Exception error) {
             throw new Exception(error.getMessage());
         }
@@ -55,16 +51,12 @@ public class AutorServices implements BaseService<Autor> {
     public Autor update(Long id, Autor entity) throws Exception {
         try{
             Optional<Autor> entityOptional = autorRepository.findById(id);
-            if (entityOptional.isPresent()) {
-                Autor autor = entityOptional.get();
-                autor.setNombre(entity.getNombre());
-                autor.setApellido(entity.getApellido());
-                autor.setBio(entity.getBio());
-                autor = autorRepository.save(autor);
-                return autor;
-            } else {
-                throw new Exception();
-            }
+            Autor autor = entityOptional.get();
+            autor.setNombre(entity.getNombre());
+            autor.setApellido(entity.getApellido());
+            autor.setBio(entity.getBio());
+            autor = autorRepository.save(autor);
+            return autor;
         } catch (Exception error) {
             throw new Exception(error.getMessage());
         }

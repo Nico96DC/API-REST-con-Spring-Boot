@@ -14,10 +14,13 @@ public class PersonaServices implements BaseService<Persona> {
     @Autowired
     private PersonaRepository personaRepository;
 
+    @Autowired
+    private LibroServices libroServices;
+
     @Override
     @Transactional
     public List<Persona> findAll() throws Exception {
-        try{
+        try {
             return personaRepository.findAll();
         } catch (Exception error) {
             throw new Exception(error.getMessage());
@@ -27,22 +30,16 @@ public class PersonaServices implements BaseService<Persona> {
     @Override
     @Transactional
     public Persona findbyId(Long id) throws Exception {
-        try{
-            Optional<Persona> entityOptional = personaRepository.findById(id);
-            if (entityOptional.isPresent()) {
-                return entityOptional.get();
-            } else {
-                throw new Exception();
-            }
-        } catch (Exception error) {
-            throw new Exception(error.getMessage());
-        }
+        Optional<Persona> personaOptional = personaRepository.findById(id);
+        Persona persona = personaOptional.orElseThrow(() -> new Exception("Persona no encontrada"));
+        persona.setLibros(libroServices.findByPersonaId(id));
+        return persona;
     }
 
     @Override
     @Transactional
     public Persona save(Persona entity) throws Exception {
-        try{
+        try {
             entity = personaRepository.save(entity);
             return entity;
         } catch (Exception error) {
@@ -53,18 +50,11 @@ public class PersonaServices implements BaseService<Persona> {
     @Override
     @Transactional
     public Persona update(Long id, Persona entity) throws Exception {
-        try{
-            Optional<Persona> entityOptional = personaRepository.findById(id);
-            if (entityOptional.isPresent()) {
-                Persona persona = entityOptional.get();
-                persona.setNombre(entity.getNombre());
-                persona.setApellido(entity.getApellido());
-                persona.setDni(entity.getDni());
-                persona = personaRepository.save(persona);
-                return persona;
-            } else {
-                throw new Exception();
-            }
+        try {
+            Optional<Persona> personaOptional = personaRepository.findById(id);
+            Persona persona = personaOptional.get();
+            persona = personaRepository.save(entity);
+            return persona;
         } catch (Exception error) {
             throw new Exception(error.getMessage());
         }
@@ -73,11 +63,11 @@ public class PersonaServices implements BaseService<Persona> {
     @Override
     @Transactional
     public boolean delete(Long id) throws Exception {
-        try{
-            if (personaRepository.existsById(id)){
+        try {
+            if (personaRepository.existsById(id)) {
                 personaRepository.deleteById(id);
                 return true;
-            } else{
+            } else {
                 throw new Exception();
             }
         } catch (Exception error) {

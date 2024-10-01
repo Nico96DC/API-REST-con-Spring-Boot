@@ -16,8 +16,9 @@ public class PersonaController {
     @Autowired
     private PersonaServices servicio;
 
-    @Autowired
-    private PersonaRepository personaRepository;
+    public PersonaController(PersonaServices servicio) {
+        this.servicio = servicio;
+    }
 
     @GetMapping("")
     public ResponseEntity<?> getAll(){
@@ -31,7 +32,7 @@ public class PersonaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getOne(@PathVariable("id") Long id){
+    public ResponseEntity<?> getOne(@PathVariable Long id){
         try {
             return ResponseEntity.status(HttpStatus.OK).
                     body(servicio.findbyId(id));
@@ -43,12 +44,12 @@ public class PersonaController {
 
     @PostMapping("")
     public ResponseEntity<?> save(@RequestBody Persona entity){
-        System.out.println("Datos tomados del cuerpo del formulario");
-        System.out.println("Nombre:" + entity.getNombre());
-        System.out.println("Apellido:" + entity.getApellido());
-        System.out.println("DNI:" + entity.getDni());
         try {
-            return ResponseEntity.status(HttpStatus.OK).
+            System.out.println("Datos tomados del cuerpo del formulario");
+            System.out.println("Nombre:" + entity.getNombre());
+            System.out.println("Apellido:" + entity.getApellido());
+            System.out.println("DNI:" + entity.getDni());
+            return ResponseEntity.status(HttpStatus.CREATED).
                     body(servicio.save(entity));
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
@@ -58,14 +59,14 @@ public class PersonaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Persona entity){
-        System.out.println("ID tomada de la url " + entity.getId());
-        System.out.println("Datos tomados del cuerpo del Formulario");
-        System.out.println("Nombre:" + entity.getNombre());
-        System.out.println("Apellido:" + entity.getApellido());
-        System.out.println("DNI:" + entity.getDni());
         try {
+            System.out.println("ID tomada de la url " + entity.getId());
+            System.out.println("Datos tomados del cuerpo del formulario");
+            System.out.println("Nombre:" + entity.getNombre());
+            System.out.println("Apellido:" + entity.getApellido());
+            System.out.println("DNI:" + entity.getDni());
             return ResponseEntity.status(HttpStatus.OK).
-                    body(servicio.save(entity));
+                    body(servicio.update(id, entity));
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body("{\"error\":\"Error de solicitud. Por favor, intente de nuevo más tarde\"}");
@@ -76,7 +77,7 @@ public class PersonaController {
     public ResponseEntity<?> delete(@PathVariable Long id){
         try {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).
-                    body("Registro " + id + " eliminado");
+                    body(servicio.delete(id));
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body("{\"error\":\"Error de solicitud. Por favor, intente de nuevo más tarde\"}");

@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.envers.Audited;
 
+import java.io.Serializable;
+
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -11,15 +14,11 @@ import org.hibernate.envers.Audited;
 @ToString
 @Builder
 @Audited
-public class Localidad {
+public class Localidad implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "Localidad")
     private String denominacion;
-
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "fk_domicilio")
-    private Domicilio domicilio;
 }

@@ -5,8 +5,6 @@ import lombok.*;
 import org.hibernate.envers.Audited;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -27,12 +25,7 @@ public class Domicilio implements Serializable {
     @Column(name = "Número")
     private int numero;
 
-    @OneToOne(mappedBy = "domicilio")
-    @JoinColumn(name = "fk_domicilio")
-    private Persona persona;
-
-    @OneToMany
-    @Builder.Default
-    @ToString.Exclude
-    private List<Localidad> localidades = new ArrayList<>();
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "fk_localidad")
+    private Localidad localidad;
 }

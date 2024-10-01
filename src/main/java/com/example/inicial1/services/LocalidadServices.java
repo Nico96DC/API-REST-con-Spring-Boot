@@ -29,11 +29,7 @@ public class LocalidadServices implements BaseService<Localidad> {
     public Localidad findbyId(Long id) throws Exception {
         try{
             Optional<Localidad> entityOptional = localidadRepository.findById(id);
-            if (entityOptional.isPresent()) {
-                return entityOptional.get();
-            } else {
-                throw new Exception();
-            }
+            return entityOptional.get();
         } catch (Exception error) {
             throw new Exception(error.getMessage());
         }
@@ -55,14 +51,10 @@ public class LocalidadServices implements BaseService<Localidad> {
     public Localidad update(Long id, Localidad entity) throws Exception {
         try{
             Optional<Localidad> entityOptional = localidadRepository.findById(id);
-            if (entityOptional.isPresent()) {
-                Localidad localidad = entityOptional.get();
-                localidad.setDenominacion(entity.getDenominacion());
-                localidad = localidadRepository.save(localidad);
-                return localidad;
-            } else {
-                throw new Exception();
-            }
+            Localidad localidad = entityOptional.get();
+            localidad.setDenominacion(entity.getDenominacion());
+            localidad = localidadRepository.save(localidad);
+            return localidad;
         } catch (Exception error) {
             throw new Exception(error.getMessage());
         }

@@ -2,7 +2,6 @@ package com.example.inicial1.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.hibernate.envers.Audited;
 
 import java.io.Serializable;
@@ -15,7 +14,7 @@ import java.util.List;
 @Setter
 @Getter
 @ToString
-@SuperBuilder
+@Builder
 @Audited
 public class Libro implements Serializable {
     @Id
@@ -34,12 +33,16 @@ public class Libro implements Serializable {
     @Column(name = "Páginas")
     private int pag;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name = "fk_persona")
     private Persona persona;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "libro_autor", joinColumns = @JoinColumn(name = "libro_id"), inverseJoinColumns = @JoinColumn(name = "autor_id"))
+    @JoinTable(
+            name = "libro_autor",
+            joinColumns = @JoinColumn(name = "fk_libro"),
+            inverseJoinColumns = @JoinColumn(name = "fk_autor")
+    )
     @Builder.Default
     @ToString.Exclude
     private List<Autor> autores = new ArrayList<>();

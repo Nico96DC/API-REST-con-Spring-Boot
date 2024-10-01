@@ -2,7 +2,6 @@ package com.example.inicial1.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,7 @@ import org.hibernate.envers.Audited;
 @Setter
 @Getter
 @ToString
-@SuperBuilder
+@Builder
 @Audited
 public class Persona implements Serializable {
     @Id
@@ -35,7 +34,7 @@ public class Persona implements Serializable {
     @JoinColumn(name = "fk_domicilio")
     private Domicilio domicilio;
 
-    @OneToMany(mappedBy = "persona", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "persona")
     @Builder.Default
     @ToString.Exclude
     private List<Libro> libros = new ArrayList<>();

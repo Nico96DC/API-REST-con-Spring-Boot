@@ -16,8 +16,9 @@ public class AutorController {
     @Autowired
     private AutorServices servicio;
 
-    @Autowired
-    private AutorRepository autorRepository;
+    public AutorController(AutorServices servicio) {
+        this.servicio = servicio;
+    }
 
     @GetMapping("")
     public ResponseEntity<?> getAll(){
@@ -44,7 +45,7 @@ public class AutorController {
     @PostMapping("")
     public ResponseEntity<?> save(@RequestBody Autor entity){
         try {
-            return ResponseEntity.status(HttpStatus.OK).
+            return ResponseEntity.status(HttpStatus.CREATED).
                     body(servicio.save(entity));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
@@ -55,9 +56,14 @@ public class AutorController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Autor entity){
         try {
+            System.out.println("ID tomada de la url " + entity.getId());
+            System.out.println("Datos tomados del cuerpo del Formulario");
+            System.out.println("Nombre:" + entity.getNombre());
+            System.out.println("Apellido:" + entity.getApellido());
+            System.out.println("Biografía: " + entity.getBio());
             return ResponseEntity.status(HttpStatus.OK).
-                    body(servicio.save(entity));
-        } catch (Exception e) {
+                    body(servicio.update(id, entity));
+        } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body("{\"error\":\"Error de solicitud. Por favor, intente de nuevo más tarde\"}");
         }
@@ -67,7 +73,7 @@ public class AutorController {
     public ResponseEntity<?> delete(@PathVariable Long id){
         try {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).
-                    body("Registro " + id + " eliminado");
+                    body(servicio.delete(id));
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
                     body("{\"error\":\"Error de solicitud. Por favor, intente de nuevo más tarde\"}");
