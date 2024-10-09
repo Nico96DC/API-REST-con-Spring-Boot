@@ -6,6 +6,8 @@ import com.example.inicial1.entities.Persona;
 import com.example.inicial1.entities.Libro;
 import com.example.inicial1.entities.Autor;
 
+import com.example.inicial1.repositories.AutorRepository;
+import com.example.inicial1.repositories.LocalidadRepository;
 import com.example.inicial1.repositories.PersonaRepository;
 
 import jakarta.transaction.Transactional;
@@ -26,21 +28,13 @@ public class Inicial1Application {
 
 	@Bean
 	@Transactional
-	CommandLineRunner init(PersonaRepository personaRepository) {
+	CommandLineRunner init(PersonaRepository personaRepository,
+                           LocalidadRepository localidadRepository, AutorRepository autorRepository) {
 		return args -> {
-			Persona per1 = Persona.builder().
-					nombre("Alberto").
-					apellido("Cortez").
-					dni(13467928).
-					build();
-
-			Domicilio dom1 = Domicilio.builder().
-					calle("Suipacha").
-					numero(239).
-					build();
-
-			Localidad loc1 = Localidad.builder().
-					denominacion("Mendoza").
+			Autor aut1 = Autor.builder().
+					nombre("Raúl").
+					apellido("Pérez").
+					bio("Escritor profesional").
 					build();
 
 			Libro lib1 = Libro.builder().
@@ -48,42 +42,32 @@ public class Inicial1Application {
 					fecha(250124).
 					genero("Narrativo").
 					pag(255).
+                    autores(List.of(aut1)).
 					build();
 
-			Autor aut1 = Autor.builder().
-					nombre("Raúl").
-					apellido("Pérez").
-					bio("Escritor profesional").
+            autorRepository.save(aut1);
+
+			Localidad loc1 = Localidad.builder().
+					denominacion("Mendoza").
 					build();
 
-			dom1.setLocalidad(loc1);
-			lib1.setAutores(List.of(aut1));
-			per1.setLibros(List.of(lib1));
-			per1.setDomicilio(dom1);
+            localidadRepository.save(loc1);
+
+			Domicilio dom1 = Domicilio.builder().
+					calle("Suipacha").
+					numero(252).
+					localidad(loc1).
+					build();
+
+			Persona per1 = Persona.builder().
+					nombre("Alberto").
+					apellido("Cortez").
+					dni(13467928).
+                    libros(List.of(lib1)).
+                    domicilio(dom1).
+					build();
 
 			personaRepository.save(per1);
-
-			Persona per2 = Persona.builder().
-					nombre("Alicia").
-					apellido("Calderon").
-					dni(12345678).
-					build();
-
-			Domicilio dom2 = Domicilio.builder().
-					calle("Lunlunta").
-					numero(339).
-					build();
-
-			Localidad loc2 = Localidad.builder().
-					denominacion("Maipú").
-					build();
-
-			Libro lib2 = Libro.builder().
-					titulo("Título 2").
-					fecha(240124).
-					genero("Narrativo").
-					pag(255).
-					build();
 
 			Autor aut2 = Autor.builder().
 					nombre("Lorena").
@@ -91,10 +75,35 @@ public class Inicial1Application {
 					bio("Escritora").
 					build();
 
-			dom2.setLocalidad(loc2);
-			lib2.setAutores(List.of(aut2));
-			per2.setLibros(List.of(lib2));
-			per2.setDomicilio(dom2);
+			Libro lib2 = Libro.builder().
+					titulo("Título 2").
+					fecha(240124).
+					genero("Narrativo").
+					pag(255).
+                    autores(List.of(aut2)).
+					build();
+
+            autorRepository.save(aut2);
+
+			Localidad loc2 = Localidad.builder().
+					denominacion("Maipú").
+					build();
+
+            localidadRepository.save(loc2);
+
+			Domicilio dom2 = Domicilio.builder().
+					calle("Lunlunta").
+					numero(339).
+                    localidad(loc2).
+					build();
+
+			Persona per2 = Persona.builder().
+					nombre("Alicia").
+					apellido("Calderon").
+					dni(12345678).
+                    libros(List.of(lib2)).
+                    domicilio(dom2).
+					build();
 
 			personaRepository.save(per2);
 		};

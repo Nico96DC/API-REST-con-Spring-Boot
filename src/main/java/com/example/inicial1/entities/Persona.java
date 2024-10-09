@@ -2,11 +2,10 @@ package com.example.inicial1.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.io.Serializable;
+import org.hibernate.envers.Audited;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.hibernate.envers.Audited;
 
 @Entity
 @AllArgsConstructor
@@ -16,7 +15,7 @@ import org.hibernate.envers.Audited;
 @ToString
 @Builder
 @Audited
-public class Persona extends Base implements Serializable {
+public class Persona extends Base {
     @Column(name = "Nombre")
     private String nombre;
 
@@ -30,8 +29,12 @@ public class Persona extends Base implements Serializable {
     @JoinColumn(name = "fk_domicilio")
     private Domicilio domicilio;
 
-    @OneToMany(mappedBy = "persona")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinTable(
+            name = "persona_libro",
+            joinColumns = @JoinColumn(name = "persona_id"),
+            inverseJoinColumns = @JoinColumn(name = "libro_id")
+    )
     @Builder.Default
-    @ToString.Exclude
-    private List<Libro> libros = new ArrayList<>();
+    private List<Libro> libros = new ArrayList<Libro>();
 }

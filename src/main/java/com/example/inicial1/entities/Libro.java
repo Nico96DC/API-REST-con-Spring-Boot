@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.envers.Audited;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,7 +14,7 @@ import java.util.List;
 @ToString
 @Builder
 @Audited
-public class Libro extends Base implements Serializable {
+public class Libro extends Base {
     @Column(name = "Título")
     private String titulo;
 
@@ -29,17 +27,6 @@ public class Libro extends Base implements Serializable {
     @Column(name = "Páginas")
     private int pag;
 
-    @ManyToOne
-    @JoinColumn(name = "fk_persona")
-    private Persona persona;
-
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
-            name = "libro_autor",
-            joinColumns = @JoinColumn(name = "fk_libro"),
-            inverseJoinColumns = @JoinColumn(name = "fk_autor")
-    )
-    @Builder.Default
-    @ToString.Exclude
-    private List<Autor> autores = new ArrayList<>();
+    @ManyToMany(cascade = CascadeType.REFRESH)
+    private List<Autor> autores;
 }
